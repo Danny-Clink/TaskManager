@@ -27,7 +27,6 @@ Controller.projectsList = function(){
 			[session.email], (err, result) => {
 				if (err) throw reject;
 
-				console.log(result);
 				resolve(result);
 			});
 	});
@@ -61,7 +60,17 @@ Controller.projectUpdate = function(req, res){
 		[name, description, id], (err) => {
 			if(err) throw err;
 
-			console.log('updated');
+			res.redirect('/manager');
+		});
+};
+
+Controller.projectDelete = function(req, res){
+	const id = req.body.idDelete.replace(/[^0-9]/gim, '');
+
+	connection.query('DELETE FROM projects WHERE ID = ? LIMIT 1',
+		[id], (err) => {
+			if (err) throw err;
+
 			res.redirect('/manager');
 		});
 };

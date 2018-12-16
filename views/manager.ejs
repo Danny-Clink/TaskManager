@@ -60,5 +60,17 @@
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Update Project</button>
               </form>
+              <center><h1><b>Delete Project</b></h1><br></center><br>
+              <form action="/manager/delete" class="container" method="POST">
+                <div class="form-group">
+                <label for="formDeleteSelect">Select project</label>
+                <select name="idDelete" id="formDeleteSelect" required="" class="form-control">
+                    <% for (let i = 0; i < projectsList.length; i++) {%>
+                    <option><%=projectsList[i].ID%> -- <%=projectsList[i].name%></option>
+                    <%} %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Delete Project</button>
+              </form>
     </body>
 </html>
