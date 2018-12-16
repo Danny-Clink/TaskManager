@@ -1,1 +1,64 @@
-<h1>manager</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>manager: <%= userEmail %></h1><br>
+        <center><h1><b>Projects</b></h1><br></center>
+        <table class="table table-striped container">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < projectsList.length; i++) {%>
+              <tr>
+                <th scope="row"><%=projectsList[i].ID%></th>
+                <td><%=projectsList[i].name%></td>
+                <td><%=projectsList[i].description%></td>
+              </tr>
+              <%} %>
+            </tbody>
+          </table><br><br><br>
+          <center><h1><b>New Project</b></h1><br></center><br>
+          <form action="/manager/create" class="container" method="POST" role="form">
+                <div class="form-group">
+                  <label for="formCreateName">Name</label>
+                  <input type="text" class="form-control" name="nameCreate" id="formCreateName" placeholder="Project name">
+                </div>
+                <div class="form-group">
+                  <label for="formCreateDescription">Description</label>
+                  <input type="text" class="form-control" name="descriptionCreate" id="formCreateDescription" placeholder="Description">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Create Project</button>
+              </form><br>
+              <center><h1><b>Update Project</b></h1><br></center><br>
+          <form action="/manager/update" class="container" method="POST">
+            <div class="form-group">
+                <label for="formUpdateSelect">Select project</label>
+                <select name="idUpdate" id="formUpdateSelect" required="" class="form-control">
+                    <% for (let i = 0; i < projectsList.length; i++) {%>
+                    <option><%=projectsList[i].ID%> -- <%=projectsList[i].name%></option>
+                    <%} %>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="formUpdateName">Name</label>
+                  <input type="text" class="form-control" name="nameUpdate" id="formUpdateName" placeholder="Project name">
+                </div>
+                <div class="form-group">
+                  <label for="formUpdateDescription">Description</label>
+                  <input type="text" class="form-control" name="descriptionUpdate" id="formUpdateDescription" placeholder="Description">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Update Project</button>
+              </form>
+    </body>
+</html>

@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session');
 
 const mainRouter = require('./routes/main');
 const developerRouter = require('./routes/developer');
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'taskManagerSecret', resave: false, saveUninitialized: true}));
 
 app.use('/', mainRouter);
 app.use('/developer', developerRouter);
