@@ -55,11 +55,18 @@ class Projects{
 		const name = req.body.updateName;
 		const description = req.body.updateDescription;
 
-		connection.query('UPDATE projects SET name = ?, description = ? WHERE name = ?',
-			[name, description, updateName], (err) => {
-				if(err) throw err;
+		connection.query('SELECT true FROM projects WHERE name = ? LIMIT 1',
+			[name], (err, result) => {
+				if (err) throw err;
 
-				res.redirect('/manager');
+				if (result.length === 0){
+					connection.query('UPDATE projects SET name = ?, description = ? WHERE name = ?',
+						[name, description, updateName], (err) => {
+							if(err) throw err;
+
+							res.redirect('/manager');
+						});
+				} else res.send(404, '<h1>This project already exist</h1>');
 			});
 	}
 

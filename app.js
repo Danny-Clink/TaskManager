@@ -8,6 +8,7 @@ const session = require('express-session');
 const mainRouter = require('./routes/main');
 const developerRouter = require('./routes/developer');
 const managerRouter = require('./routes/manager');
+const projectRouter = require('./routes/project');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(session({secret: 'taskManagerSecret', resave: false, saveUninitialized: 
 app.use('/', mainRouter);
 app.use('/developer', developerRouter);
 app.use('/manager', managerRouter);
+app.use('/manager/:id', projectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

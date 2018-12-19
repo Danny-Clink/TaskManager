@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project: <%= getProjectInfo[0].name %></title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <a class="btn btn-primary mb-2" href="/manager">Back to projects</a>
+<center><h1><b name="projectName"><%= getProjectInfo[0].name %></b></h1><br></center>
+<center><h1><b>Tasks</b></h1><br></center>
+<table class="table table-striped container">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">StartDate</th>
+        <th scope="col">EndDate</th>
+        <th scope="col">Status</th>
+        <th scope="col">Project</th>
+        <th scope="col">Developer</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+      <tr>
+        <th scope="row"><%=getTasksInfo[i].name%></th>
+        <td><%=getTasksInfo[i].description%></td>
+        <td><%=getTasksInfo[i].startDate%></td>
+        <td><%=getTasksInfo[i].endDate%></td>
+        <td><%=getTasksInfo[i].status%></td>
+        <td><%=getTasksInfo[i].project%></td>
+        <td><%=getTasksInfo[i].developer%></td>
+      </tr>
+      <%} %>
+    </tbody>
+  </table><br><br><br>
+
+  <center><h1><b>New Task</b></h1><br></center><br>
+          <form action="/manager/<%= getProjectInfo[0].name %>/create" class="container" method="POST" role="form">
+                <div class="form-group">
+                  <label for="createName">Name</label>
+                  <input type="text" class="form-control" name="createName" id="createName" placeholder="Task name">
+                </div>
+                <div class="form-group">
+                  <label for="createDescription">Description</label>
+                  <input type="text" class="form-control" name="createDescription" id="createFormDescription" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="createStartDate">StartDate</label>
+                  <input type="text" class="form-control" name="createStartDate" id="createStartDate" placeholder="StartDate">
+                </div>
+                <div class="form-group">
+                  <label for="createEndDate">EndDate</label>
+                  <input type="text" class="form-control" name="createEndDate" id="createEndDate" placeholder="EndDate">
+                </div>
+                <div class="form-group">
+                  <label for="createProject">Project</label>
+                  <input type="text" class="form-control" name="createProject" id="createProject" placeholder="Description" value="<%= getProjectInfo[0].name %>">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Create Task</button>
+              </form><br>
+
+              <center><h1><b>Update Task</b></h1><br></center><br>
+              <form action="/manager/<%= getProjectInfo[0].name %>/update" class="container" method="POST" role="form">
+                <div class="form-group">
+                    <label for="updateSelect">Select task</label>
+                    <select name="updateSelect" id="updateSelect" required="" class="form-control">
+                        <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+                        <option><%=getTasksInfo[i].name%></option>
+                        <%} %>
+                        </select>
+                    </div>
+                <div class="form-group">
+                  <label for="UpdateName">Name</label>
+                  <input type="text" class="form-control" name="updateName" id="UpdateName" placeholder="Task name">
+                </div>
+                <div class="form-group">
+                  <label for="UpdateDescription">Description</label>
+                  <input type="text" class="form-control" name="updateDescription" id="UpdateDescription" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="UpdateStartDate">StartDate</label>
+                  <input type="text" class="form-control" name="updateStartDate" id="UpdateStartDate" placeholder="StartDate">
+                </div>
+                <div class="form-group">
+                  <label for="UpdateEndDate">EndDate</label>
+                  <input type="text" class="form-control" name="updateEndDate" id="UpdateEndDate" placeholder="EndDate">
+                </div>
+                  <div class="form-group">
+                    <label for="UpdateProject">Project</label>
+                    <input type="text" class="form-control" name="updateProject" id="UpdateProject" value="<%= getProjectInfo[0].name %>">
+                  </div>
+                <button type="submit" class="btn btn-primary mb-2">Update Task</button>
+              </form><br>
+
+              <center><h1><b>Delete Task</b></h1><br></center><br>
+              <form action="/manager/<%= getProjectInfo[0].name %>/delete" class="container" method="POST" role="form">
+                <div class="form-group">
+                <label for="selectDelete">Select Task</label>
+                <select name="deleteName" id="selectDelete" required="" class="form-control">
+                    <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+                    <option><%=getTasksInfo[i].name%></option>
+                    <%} %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Delete Task</button>
+              </form>
+
+              <center><h1><b>Assign Developer</b></h1><br></center><br>
+              <form action="/manager/<%= getProjectInfo[0].name %>/assign" class="container" method="POST" role="form">
+                <div class="form-group">
+                <label for="selectTask">Select task</label>
+                <select name="selectTask" id="selectTask" required="" class="form-control">
+                    <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+                    <option><%=getTasksInfo[i].name%></option>
+                    <%} %>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="selectDeveloper">Select developer</label>
+                  <select name="selectName" id="selectDeveloper" required="" class="form-control">
+                      <% for (let i = 0; i < getDevelopers.length; i++) {%>
+                      <option><%=getDevelopers[i].username%></option>
+                      <%} %>
+                      </select>
+                  </div>
+                <button type="submit" class="btn btn-primary mb-2">Select Developer</button>
+              </form>
+</body>
+</html>
