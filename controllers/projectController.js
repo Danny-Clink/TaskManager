@@ -52,9 +52,9 @@ Controller.getTasksInfo = async function(){
 				for(let i = 0; i < result.length; i++){
 					if(result[i].endDate < new Date()){
 						connection.query('UPDATE tasks SET status = "expired" WHERE name = ?',
-							[result[0].name], (err) => {
+							[result[i].name], (err) => {
 								if (err) throw err;
-								result[0].status = 'expired';
+								result[i].status = 'expired';
 								resolve(result);
 							});
 					}

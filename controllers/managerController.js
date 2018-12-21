@@ -60,8 +60,13 @@ class Projects{
 				if (err) throw err;
 
 				if (result.length === 0){
+					connection.query('UPDATE tasks SET project = ? WHERE project = ?',
+						[name, updateName], (err) => {
+							if (err) throw err;
+						});
+
 					connection.query('UPDATE projects SET name = ?, description = ? WHERE name = ?',
-						[name, description, updateName], (err) => {
+						[name, description, updateName, ], (err) => {
 							if(err) throw err;
 
 							res.redirect('/manager');
@@ -72,6 +77,11 @@ class Projects{
 
 	delete(req, res){
 		const name = req.body.deleteName;
+
+		connection.query('DELETE FROM tasks WHERE project = ?',
+			[name], (err) => {
+				if (err) throw err;
+			});
 
 		connection.query('DELETE FROM projects WHERE name = ? LIMIT 1',
 			[name], (err) => {

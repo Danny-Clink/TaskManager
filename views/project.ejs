@@ -3,9 +3,12 @@
     <head>
         <title>Project: <%= getProjectInfo[0].name %></title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+        <script src='/javascripts/formScripts.js'></script>
     </head>
     <body>
       <a class="btn btn-primary mb-2" href="/manager">Back to projects</a>
@@ -38,65 +41,113 @@
     </tbody>
   </table><br><br><br>
 
-  <center><h1><b>New Task</b></h1><br></center><br>
-          <form action="/manager/<%= getProjectInfo[0].name %>/create" class="container" method="POST" role="form">
+  <div class="accordion container" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            New Task
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <center><h1><b>New Task</b></h1><br></center><br>
+          <form action="/manager/<%= getProjectInfo[0].name %>/create" class="container" method="POST" role="form" id="createForm" onsubmit="return validateNameTask(); return validateDescriptionTask()">
                 <div class="form-group">
                   <label for="createName">Name</label>
-                  <input type="text" class="form-control" name="createName" id="createName" placeholder="Task name">
+                  <input type="text" class="form-control" onblur="validateNameTask()" name="createName" id="createName" placeholder="Task name"  title="Latin characters, Numbers, _" required>
+                  <p id="validNewName" style="color: red"></p>
                 </div>
                 <div class="form-group">
                   <label for="createDescription">Description</label>
-                  <input type="text" class="form-control" name="createDescription" id="createFormDescription" placeholder="Description">
+                  <input type="text" class="form-control" onblur="validateDescriptionTask()" name="createDescription" id="createDescription" placeholder="Description" required>
+                  <p id="validNewDescription" style="color: red"></p>
                 </div>
                 <div class="form-group">
                   <label for="createStartDate">StartDate</label>
-                  <input type="text" class="form-control" name="createStartDate" id="createStartDate" placeholder="StartDate">
+                    <div class="input-group date">
+                      <input type="text" class="form-control" autocomplete="off" name="createStartDate" id="createStartDate" placeholder="StartDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
                 </div>
                 <div class="form-group">
                   <label for="createEndDate">EndDate</label>
-                  <input type="text" class="form-control" name="createEndDate" id="createEndDate" placeholder="EndDate">
+                    <div class="input-group date">
+                      <input type="text" class="form-control" autocomplete="off" name="createEndDate" id="createEndDate" placeholder="EndDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
                 </div>
                 <div class="form-group">
                   <label for="createProject">Project</label>
-                  <input type="text" class="form-control" name="createProject" id="createProject" placeholder="Description" value="<%= getProjectInfo[0].name %>">
+                  <input type="text" class="form-control" name="createProject" id="createProject" placeholder="Description" value="<%= getProjectInfo[0].name %>" required>
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Create Task</button>
+                <button type="submit"  class="btn btn-primary mb-2" id="createTask">Create Task</button>
               </form><br>
-
-              <center><h1><b>Update Task</b></h1><br></center><br>
-              <form action="/manager/<%= getProjectInfo[0].name %>/update" class="container" method="POST" role="form">
-                <div class="form-group">
-                    <label for="updateSelect">Select task</label>
-                    <select name="updateSelect" id="updateSelect" required="" class="form-control">
-                        <% for (let i = 0; i < getTasksInfo.length; i++) {%>
-                        <option><%=getTasksInfo[i].name%></option>
-                        <%} %>
-                        </select>
-                    </div>
-                <div class="form-group">
-                  <label for="UpdateName">Name</label>
-                  <input type="text" class="form-control" name="updateName" id="UpdateName" placeholder="Task name">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Update Task
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <center><h1><b>Update Task</b></h1><br></center><br>
+          <form action="/manager/<%= getProjectInfo[0].name %>/update" class="container" method="POST" role="form" onsubmit="return validateNameTask(); return validateDescriptionTask()">
+            <div class="form-group">
+                <label for="updateSelect">Select task</label>
+                <select name="updateSelect" id="updateSelect" required="" class="form-control">
+                    <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+                    <option><%=getTasksInfo[i].name%></option>
+                    <%} %>
+                    </select>
                 </div>
-                <div class="form-group">
-                  <label for="UpdateDescription">Description</label>
-                  <input type="text" class="form-control" name="updateDescription" id="UpdateDescription" placeholder="Description">
+            <div class="form-group">
+              <label for="UpdateName">Name</label>
+              <input type="text" class="form-control" onblur="validateNameTask()" name="updateName" id="updateName" placeholder="Task name" required>
+              <p id="validUpdateName" style="color: red;"></p>
+            </div>
+            <div class="form-group">
+              <label for="UpdateDescription">Description</label>
+              <input type="text" class="form-control" onblur="validateDescriptionTask()" name="updateDescription" id="updateDescription" placeholder="Description" required>
+              <p id="validUpdateDescription" style="color: red"></p>
+            </div>
+            <div class="form-group">
+              <label for="UpdateStartDate">StartDate</label>
+                <div class="input-group date">
+                  <input type="text" class="form-control" autocomplete="off" name="updateStartDate" id="UpdateStartDate" placeholder="StartDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                 </div>
-                <div class="form-group">
-                  <label for="UpdateStartDate">StartDate</label>
-                  <input type="text" class="form-control" name="updateStartDate" id="UpdateStartDate" placeholder="StartDate">
+            </div>
+            <div class="form-group">
+              <label for="UpdateEndDate">EndDate</label>
+                <div class="input-group date">
+                  <input type="text" class="form-control" autocomplete="off" name="updateEndDate" id="UpdateEndDate" placeholder="EndDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                 </div>
-                <div class="form-group">
-                  <label for="UpdateEndDate">EndDate</label>
-                  <input type="text" class="form-control" name="updateEndDate" id="UpdateEndDate" placeholder="EndDate">
-                </div>
-                  <div class="form-group">
-                    <label for="UpdateProject">Project</label>
-                    <input type="text" class="form-control" name="updateProject" id="UpdateProject" value="<%= getProjectInfo[0].name %>">
-                  </div>
-                <button type="submit" class="btn btn-primary mb-2">Update Task</button>
-              </form><br>
-
-              <center><h1><b>Delete Task</b></h1><br></center><br>
+            </div>
+              <div class="form-group">
+                <label for="UpdateProject">Project</label>
+                <input type="text" class="form-control" name="updateProject" id="UpdateProject" value="<%= getProjectInfo[0].name %>" required>
+              </div>
+            <button type="submit" class="btn btn-primary mb-2">Update Task</button>
+          </form><br>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Delete Task
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div class="card-body">
+          <center><h1><b>Delete Task</b></h1><br></center><br>
               <form action="/manager/<%= getProjectInfo[0].name %>/delete" class="container" method="POST" role="form">
                 <div class="form-group">
                 <label for="selectDelete">Select Task</label>
@@ -108,26 +159,49 @@
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Delete Task</button>
               </form>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+            Assign Developer
+          </button>
+        </h5>
+      </div>
+      <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div class="card-body">
+          <center><h1><b>Assign Developer</b></h1><br></center><br>
+          <form action="/manager/<%= getProjectInfo[0].name %>/assign" class="container" method="POST" role="form">
+            <div class="form-group">
+            <label for="selectTask">Select task</label>
+            <select name="selectTask" id="selectTask" required="" class="form-control">
+                <% for (let i = 0; i < getTasksInfo.length; i++) {%>
+                <option><%=getTasksInfo[i].name%></option>
+                <%} %>
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="selectDeveloper">Select developer</label>
+              <select name="selectName" id="selectDeveloper" required="" class="form-control">
+                  <% for (let i = 0; i < getDevelopers.length; i++) {%>
+                  <option><%=getDevelopers[i].username%></option>
+                  <%} %>
+                  </select>
+              </div>
+            <button type="submit" class="btn btn-primary mb-2">Select Developer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
-              <center><h1><b>Assign Developer</b></h1><br></center><br>
-              <form action="/manager/<%= getProjectInfo[0].name %>/assign" class="container" method="POST" role="form">
-                <div class="form-group">
-                <label for="selectTask">Select task</label>
-                <select name="selectTask" id="selectTask" required="" class="form-control">
-                    <% for (let i = 0; i < getTasksInfo.length; i++) {%>
-                    <option><%=getTasksInfo[i].name%></option>
-                    <%} %>
-                    </select>
-                </div>
-                <div class="form-group">
-                  <label for="selectDeveloper">Select developer</label>
-                  <select name="selectName" id="selectDeveloper" required="" class="form-control">
-                      <% for (let i = 0; i < getDevelopers.length; i++) {%>
-                      <option><%=getDevelopers[i].username%></option>
-                      <%} %>
-                      </select>
-                  </div>
-                <button type="submit" class="btn btn-primary mb-2">Select Developer</button>
-              </form>
+              
+
+              
+
+              
 </body>
 </html>

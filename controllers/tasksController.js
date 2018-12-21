@@ -46,7 +46,6 @@ class Tasks{
 						[name, description, startDate, endDate, updateSelect], (err) => {
 							if (err) throw err;
 
-							console.log('updated');
 							res.redirect('/manager/' + project);
 						});
 				} else res.send(404, '<h1>This task already exist</h1>');
