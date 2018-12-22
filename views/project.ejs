@@ -186,7 +186,7 @@
               <label for="selectDeveloper">Select developer</label>
               <select name="selectName" id="selectDeveloper" required="" class="form-control">
                   <% for (let i = 0; i < getDevelopers.length; i++) {%>
-                  <option><%=getDevelopers[i].username%></option>
+                  <option><%=getDevelopers[i].email%></option>
                   <%} %>
                   </select>
               </div>
@@ -195,13 +195,7 @@
         </div>
       </div>
     </div>
-  </div>
-  
+  </div><br><br><br><br>
 
-              
-
-              
-
-              
 </body>
 </html>

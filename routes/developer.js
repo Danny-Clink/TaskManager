@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const checkAuth = require('../middleware/checkAuth');
 
 const developerController = require('../controllers/developerController');
+const developer = new developerController();
 
-router.get('/', developerController.developer);
+router.get('/', checkAuth,  (req, res) => {developer.developer(req, res);});
+router.post('/completed', checkAuth, (req, res) => {developer.doneTask(req, res);});
 
 module.exports = router;

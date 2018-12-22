@@ -1,1 +1,86 @@
-<h1>developer</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+        <script src='/javascripts/sort.js'></script>
+    </head>
+    <body>
+            <h1>developer: <%= devEmail %></h1>
+            <center><h1><b>Tasks:</b></h1></center><br>
+        <table class="table table-striped container" id="tasks">
+            <thead>
+              <tr>
+                <th scope="col">Project</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">StartDate</th>
+                <th scope="col">EndDate</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < getTasks.length; i++) {%>
+              <tr>
+                <td scope="row"><b><%=getTasks[i].project%></b></td>
+                <td><%=getTasks[i].name%></td>
+                <td><%=getTasks[i].description%></a></td>
+                <td><%=getTasks[i].startDate%></td>
+                <td><%=getTasks[i].endDate%></td>
+                <td><%=getTasks[i].status%></td>
+              </tr>
+              <%} %>
+            </tbody>
+          </table>
+          <center>
+          <div class="row container" style="padding-left: 10%;">
+            <div>
+                <label for="project">Project</label>
+                <input type="text"  class="form-control" onkeyup="sortProject()" placeholder="Project Name" id="project">
+            </div>
+            <div>
+            <label for="startDate">StartDate</label>
+            <div class="input-group date">
+                    <input type="text" class="form-control" onchange="sortStartDate()" autocomplete="off" name="updateStartDate" id="startDate" placeholder="StartDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                  </div>
+            </div>
+            <div>
+                <label for="endDate">EndDate</label>
+                <div class="input-group date">
+                        <input type="text" class="form-control" onchange="sortEndDate()" autocomplete="off" name="updateStartDate" id="endDate" placeholder="EndDate" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                      </div>
+            </div>
+            <div>
+                <label for="status">Status</label>
+            <select name="selectSort" id="status" required="" onchange="sortStatus()" style="display: inline-block" class="form-control">
+                        <option></option>
+                        <option>expired</option>
+                        <option>assigned</option>
+                        <option>done</option>
+                </select>
+            </div>
+            </div>
+        <br>
+          <div class="container">
+              <div style="width: 400px; height: 400px">
+          <center><h1><b>Completed Task</b></h1><br></center>
+              <form action="/developer/completed" method="POST">
+                <div class="form-group">
+                <label for="selectTask">Select Task</label>
+                <select name="selectedTask" id="selectTask" required="" class="form-control">
+                    <% for (let i = 0; i < getTasks.length; i++) {%>
+                    <option><%=getTasks[i].name%></option>
+                    <%} %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Done</button>
+              </form>
+            </div>
+        </center>
+    </body>
+</html>

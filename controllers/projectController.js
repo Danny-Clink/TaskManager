@@ -59,6 +59,10 @@ Controller.getTasksInfo = async function(){
 							});
 					}
 				}
+				for(let i = 0; i<result.length; i++){
+					result[i].startDate = result[i].startDate.toLocaleDateString('en-US');
+					result[i].endDate = result[i].endDate.toLocaleDateString('en-US');
+				}
 				resolve(result);
 			});
 	});
@@ -66,7 +70,7 @@ Controller.getTasksInfo = async function(){
 
 Controller.getDevelopers = async function(){
 	return new Promise(function(resolve, reject){
-		connection.query('SELECT username FROM users WHERE role = "Developer"',
+		connection.query('SELECT email FROM users WHERE role = "Developer"',
 			(err, result) => {
 				if (err) throw reject;
 

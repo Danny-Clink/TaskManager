@@ -18,6 +18,7 @@ $(function() {
 	$('.input-group.date').datepicker({
 		format: 'yyyy/mm/dd'
 	});
+
 });
 
 $('.collapse').collapse()
@@ -93,7 +94,7 @@ function validateDescriptionTask(){
 	} else messageNew = '';
 
 	if(pattern.test(taskUpdateDescription)){
-		messageUpdate = 'Only Latin characters, Numbers, _, !, ?, (), ,, .'; 
+		messageUpdate = 'Only Latin characters, Numbers, _, !, ?, (), ,, .';
 		document.getElementById('validUpdateDescription').innerHTML = messageUpdate;
 		return false;
 	} else messageUpdate = '';
