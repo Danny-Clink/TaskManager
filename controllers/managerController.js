@@ -24,14 +24,14 @@ class Projects{
 		return new Promise(function(resolve, reject){
 			connection.query('SELECT * FROM projects WHERE manager = ?',
 				[session.email], (err, result) => {
-					if (err) throw reject;
+					if (err) reject(err);
 
 					resolve(result);
 				});
 		});
 	}
 
-	create(req, res){
+	createProject(req, res){
 		const name = req.body.createName;
 		const description = req.body.createDescription;
 
@@ -50,7 +50,7 @@ class Projects{
 			});
 	}
 
-	update(req, res){
+	updateData(req, res){
 		const updateName = req.body.updateSelectName;
 		const name = req.body.updateName;
 		const description = req.body.updateDescription;
@@ -60,22 +60,29 @@ class Projects{
 				if (err) throw err;
 
 				if (result.length === 0){
-					connection.query('UPDATE tasks SET project = ? WHERE project = ?',
-						[name, updateName], (err) => {
-							if (err) throw err;
-						});
+					this.updateTask(name, updateName);
+					this.updateProject(name, description, updateName);
 
-					connection.query('UPDATE projects SET name = ?, description = ? WHERE name = ?',
-						[name, description, updateName, ], (err) => {
-							if(err) throw err;
-
-							res.redirect('/manager');
-						});
 				} else res.send(404, '<h1>This project already exist</h1>');
 			});
 	}
 
-	delete(req, res){
+	updateTask(name, updateName){
+		connection.query('UPDATE tasks SET project = ? WHERE project = ?',
+			[name, updateName], (err) => {
+				if (err) throw err;
+			});
+	}
+
+	updateProject(name, description, updateName, res){
+		connection.query('UPDATE projects SET name = ?, description = ? WHERE name = ?',
+			[name, description, updateName], (err) => {
+				if(err) throw err;
+				res.redirect('/manager');
+			});
+	}
+
+	deleteData(req, res){
 		const name = req.body.deleteName;
 
 		connection.query('DELETE FROM tasks WHERE project = ?',
@@ -89,6 +96,15 @@ class Projects{
 
 				res.redirect('/manager');
 			});
+	}
+
+	logout(req, res){
+		req.session.destroy((err) => {
+			if (err) throw err;
+			session.role = null;
+			session.email = null;
+			res.redirect('/');
+		});
 	}
 }
 

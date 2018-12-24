@@ -9,42 +9,50 @@ const connection = mysql.createConnection({
 	database: 'taskmanager'
 });
 
-const Controller = function(){};
+class Login{
 
-Controller.checkAuth = function(req, res){
-	const email = req.body.loginEmail;
-	const password = req.body.loginPassword;
-	session.email = email;
+	checkAuth(req, res){
+		const {loginEmail, loginPassword} = req.body;
+		session.email = loginEmail;
 
-	connection.query('SELECT * FROM users WHERE email = ?',
-		[email], (err, result) => {
-			if(err) throw err;
+		connection.query('SELECT * FROM users WHERE email = ?',
+			[loginEmail], (err, result) => {
+				if(err) throw err;
 
-			const passwordValid = bcrypt.compareSync(password, result[0].password);
-			if (passwordValid) {
-				const role = result[0].role;
-				session.role = role;
-				switch(role){
-				case('Developer'): res.redirect('/developer');
-					break;
-				case('Manager'): res.redirect('/manager');
-					break;
-				default: res.send('<h1><b>Error</b></h1>');
-					break;
+				const dbPassword = result[0] && result[0].password || '';
+				const isValidPassword = bcrypt.compareSync(loginPassword, dbPassword);
+
+				if (!isValidPassword) {
+					return res.send(403);
 				}
+				this.checkRole(res, result);
+				session.token = this.getToken(result);
+			});
+	}
 
-				const token = jwt.sign(
-					{
-						userId: result[0].ID,
-						email: result[0].email
-					},
-					process.env.JWT_KEY,
-					{
-						expiresIn: '1h'
-					});
-				session.token = token;
-			} else res.send('<h1>invalid password ');
-		});
-};
+	checkRole(res, result){
+		const role = result[0].role;
+		session.role = role;
+		switch(role){
+		case('Developer'): res.redirect('/developer');
+			break;
+		case('Manager'): res.redirect('/manager');
+			break;
+		default: res.send('<h1><b>Error</b></h1>');
+			break;
+		}
+	}
 
-module.exports = Controller;
+	getToken(result){
+		return jwt.sign(
+			{
+				userId: result[0].ID,
+				email: result[0].email
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: '1h'
+			});
+	}
+}
+module.exports = Login;

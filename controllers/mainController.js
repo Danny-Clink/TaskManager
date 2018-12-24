@@ -1,7 +1,7 @@
-const Controller = function(){};
+class Main{
+	main(req, res){
+		res.render('main');
+	}
+}
 
-Controller.main = function(req, res){
-	res.render('main');
-};
-
-module.exports = Controller;
+module.exports = Main;

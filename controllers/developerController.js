@@ -24,13 +24,15 @@ class Developer{
 			const email = session.email;
 			connection.query('SELECT name, description, startDate, endDate, status, project FROM tasks WHERE developer = ?',
 				[email], (err, result) => {
-					if (err) throw reject;
+					if (err) reject(err);
 
-					for(let i = 0; i<result.length; i++){
-						result[i].startDate = result[i].startDate.toLocaleDateString('en-US');
-						result[i].endDate = result[i].endDate.toLocaleDateString('en-US');
+					if(result){
+						result.forEach(element => {
+							element.startDate = element.startDate.toLocaleDateString('en-US');
+							element.endDate = element.endDate.toLocaleDateString('en-US');
+						});
+						resolve(result);
 					}
-					resolve(result);
 				});
 		});
 	}
@@ -43,6 +45,15 @@ class Developer{
 
 				res.redirect('/developer');
 			});
+	}
+
+	logout(req, res){
+		req.session.destroy((err) => {
+			if (err) throw err;
+			session.role = null;
+			session.email = null;
+			res.redirect('/');
+		});
 	}
 }
 

@@ -10,6 +10,9 @@
         <script src='/javascripts/formScripts.js'></script>
     </head>
     <body>
+      <form action="/manager/logout" method="POST">
+        <button type="submit" class="btn btn-primary mb-2">Logout</button>
+      </form>
         <h1>manager: <%= userEmail %></h1><br>
         <center><h1><b>Projects</b></h1><br></center>
         <table class="table table-striped container">

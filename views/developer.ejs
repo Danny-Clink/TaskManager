@@ -11,6 +11,9 @@
         <script src='/javascripts/sort.js'></script>
     </head>
     <body>
+        <form action="/developer/logout" method="POST">
+            <button type="submit" class="btn btn-primary mb-2">Logout</button>
+        </form>
             <h1>developer: <%= devEmail %></h1>
             <center><h1><b>Tasks:</b></h1></center><br>
         <table class="table table-striped container" id="tasks">

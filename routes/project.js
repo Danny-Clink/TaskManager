@@ -4,6 +4,7 @@ const checkAuth = require('../middleware/checkAuth');
 
 const projectController = require('../controllers/projectController');
 const tasksController = require('../controllers/tasksController');
+
 const tasks = new tasksController();
 
 router.get('/', checkAuth, projectController.project);

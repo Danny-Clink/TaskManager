@@ -34,7 +34,7 @@ Controller.getProjectInfo = async function(){
 
 		connection.query('SELECT * FROM projects WHERE name = ? LIMIT 1',
 			[projectName], (err, result) => {
-				if (err) throw reject;
+				if (err) reject(err);
 
 				resolve(result);
 			});
@@ -47,22 +47,22 @@ Controller.getTasksInfo = async function(){
 
 		connection.query('SELECT * FROM tasks WHERE project = ?',
 			[projectName], (err, result) => {
-				if (err) throw reject;
+				if (err) reject(err);
 
-				for(let i = 0; i < result.length; i++){
-					if(result[i].endDate < new Date()){
+				result.forEach(element => {
+					if(element.endDate < new Date()){
 						connection.query('UPDATE tasks SET status = "expired" WHERE name = ?',
-							[result[i].name], (err) => {
+							[element.name], (err) => {
 								if (err) throw err;
-								result[i].status = 'expired';
+								element.status = 'expired';
 								resolve(result);
 							});
 					}
-				}
-				for(let i = 0; i<result.length; i++){
-					result[i].startDate = result[i].startDate.toLocaleDateString('en-US');
-					result[i].endDate = result[i].endDate.toLocaleDateString('en-US');
-				}
+				});
+				result.forEach(element => {
+					element.startDate = element.startDate.toLocaleDateString('en-US');
+					element.endDate = element.endDate.toLocaleDateString('en-US');
+				});
 				resolve(result);
 			});
 	});
@@ -72,7 +72,7 @@ Controller.getDevelopers = async function(){
 	return new Promise(function(resolve, reject){
 		connection.query('SELECT email FROM users WHERE role = "Developer"',
 			(err, result) => {
-				if (err) throw reject;
+				if (err) reject(err);
 
 				resolve(result);
 			});

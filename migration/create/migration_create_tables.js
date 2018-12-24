@@ -3,7 +3,7 @@ const UserModel = require('../models/users');
 const ProjectsModel = require('../models/projects');
 const TasksModel = require('../models/tasks');
 
-const sequelize = new Sequelize('test1', 'root', 'strangerthings', {
+const sequelize = new Sequelize('taskmanager', 'root', 'strangerthings', {
 	host: 'localhost',
 	dialect: 'mysql',
 	pool: {

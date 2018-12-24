@@ -5,8 +5,12 @@ const mainController = require('../controllers/mainController');
 const registerController = require('../controllers/registerController');
 const loginController = require('../controllers/loginController');
 
-router.get('/', mainController.main);
-router.post('/register', registerController.register);
-router.post('/login', loginController.checkAuth);
+const main = new mainController();
+const register = new registerController();
+const login = new loginController();
+
+router.get('/', (req, res) => {main.main(req, res);});
+router.post('/register', (req, res) => {register.register(req, res);});
+router.post('/login', (req, res) => {login.checkAuth(req, res);});
 
 module.exports = router;
