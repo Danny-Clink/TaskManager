@@ -49,7 +49,7 @@ class Login{
 				userId: result[0].ID,
 				email: result[0].email
 			},
-			process.env.JWT_KEY,
+			'protection',
 			{
 				expiresIn: '1h'
 			});
