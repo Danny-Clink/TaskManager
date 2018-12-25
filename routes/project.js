@@ -5,9 +5,10 @@ const checkAuth = require('../middleware/checkAuth');
 const projectController = require('../controllers/projectController');
 const tasksController = require('../controllers/tasksController');
 
+const project = new projectController();
 const tasks = new tasksController();
 
-router.get('/', checkAuth, projectController.project);
+router.get('/', checkAuth, (req, res) => {project.project(req, res);});
 router.post('/create', checkAuth, (req, res) => {tasks.create(req, res);});
 router.post('/update', checkAuth, (req, res) => {tasks.update(req, res);});
 router.post('/delete', checkAuth, (req, res) => {tasks.delete(req, res);});

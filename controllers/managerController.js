@@ -3,7 +3,7 @@ const connection = require('../database/database');
 
 class Projects{
 	async manager(req, res){
-		const projectsList = await this.list();
+		const projectsList = await this.getProgectsList();
 
 		if(session.role === 'Manager'){
 			res.render('manager',
@@ -14,7 +14,7 @@ class Projects{
 		}
 	}
 
-	async list(){
+	async getProgectsList(){
 		return new Promise(function(resolve, reject){
 			connection.query('SELECT * FROM projects WHERE manager = ?',
 				[session.email], (err, result) => {
