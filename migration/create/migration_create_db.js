@@ -3,7 +3,7 @@ const Tables = require('./migration_create_tables');
 
 const tables = new Tables();
 
-const sequelize = new Sequelize('', 'root', 'strangerthings', {
+const sequelize = new Sequelize('', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'mysql',
 	pool: {
