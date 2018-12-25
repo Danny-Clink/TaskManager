@@ -1,13 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql');
 const session = require('express-session');
-const connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'strangerthings',
-	database: 'taskmanager'
-});
+const connection = require('../database/database');
 
 class Login{
 

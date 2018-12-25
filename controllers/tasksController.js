@@ -1,10 +1,4 @@
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'strangerthings',
-	database: 'taskmanager'
-});
+const connection = require('../database/database');
 
 class Tasks{
 	create(req, res){

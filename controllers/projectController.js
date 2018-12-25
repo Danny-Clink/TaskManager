@@ -1,11 +1,5 @@
 const session = require('express-session');
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'strangerthings',
-	database: 'taskmanager'
-});
+const connection = require('../database/database');
 
 const Controller = function(){};
 

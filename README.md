@@ -41,6 +41,19 @@ node migration.js
 
 wait until the program ends with the words: "tables created".
 
+* Include database:
+
+at path "database" find file "database.js" setup your server **user** and **password**(default: user: 'root', password: ' ') and save this file:
+
+```js
+const connection = mysql.createConnection({
+	host: 'localhost',
+	user: 'username',
+	password: 'password',
+	database: 'taskmanager'
+});
+```
+
 * Open in the terminal project general path and run the application:
 
 ```
