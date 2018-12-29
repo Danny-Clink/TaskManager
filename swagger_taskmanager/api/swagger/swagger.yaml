@@ -1,0 +1,580 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "Task Manager"
+tags:
+- name: "main"
+  description: "Main page"
+- name: "manager"
+  description: "Access manager page"
+- name: "developer"
+  description: "Access developer page"
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+  - text/plain
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /login:    
+    post:
+      tags:
+      - "main"
+      description: "Check user Autorization"
+      operationId: "CheckAuth"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "login"
+        description: "User authorization"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Get authorized user"
+        400:
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "CheckAuth"
+  /register:
+     post:
+      tags:
+      - "main"     
+      description: "User registration"
+      operationId: "Register"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "register"
+        description: "User registration"
+        required: true
+        schema:
+          $ref: "#/definitions/Register"
+      responses:
+        200:
+          description: "Succsessful registration"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Get authorized user"
+        400:
+          description: "invalid confirm password"
+      x-swagger-router-controller: "Register"
+  /manager:
+    get:
+        tags:
+        - "manager"
+        description: "Get projects of manager"
+        operationId: "GetProjects"
+        produces:
+        - "application/json"
+        - "text/plain"
+        parameters:
+        - name: "managerEmail"
+          in: "query"
+          description: "The email of manager"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Successful operation"
+            schema:
+              type: "string"
+            headers:
+              X-Rate-Limit:
+                type: "integer"
+                format: "int32"
+                description: "Get projects of manager"
+          400:
+            description: "Invalid manager email"
+        x-swagger-router-controller: "ManagerProjects"
+  /manager/create:
+    post:
+      tags:
+      - "manager"
+      description: "Create new project"
+      operationId: "CreateProject"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "createProject"
+        description: "Create Project"
+        required: true
+        schema:
+          $ref: "#/definitions/managerNewProject"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Create new Project of manager"
+        400:
+          description: "Project not created"
+    x-swagger-router-controller: "ManagerProjects"
+  /manager/update:
+    post:
+      tags:
+      - "manager"
+      description: "Update project data"
+      operationId: "UpdateData"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "updateProject"
+        description: "Update Project"
+        required: true
+        schema:
+          $ref: "#/definitions/managerUpdateProject"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Update Project of manager"
+        400:
+          description: "Project not updated"
+    x-swagger-router-controller: "ManagerProjects"
+  /manager/delete:
+    post:
+      tags:
+      - "manager"
+      description: "Delete project data"
+      operationId: "DeleteData"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "deleteProject"
+        description: "Delete Project"
+        required: true
+        schema:
+          $ref: "#/definitions/managerDeleteProject"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Delete Project of manager"
+        400:
+          description: "Project not deleted"
+    x-swagger-router-controller: "ManagerProjects"
+  /manager/project:
+    get:
+        tags:
+        - "manager"
+        description: "Get project info"
+        operationId: "GetProjectInfo"
+        produces:
+        - "application/json"
+        - "text/plain"
+        parameters:
+        - name: "projectName"
+          in: "query"
+          description: "The name of project"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Successful operation"
+            schema:
+              type: "string"
+            headers:
+              X-Rate-Limit:
+                type: "integer"
+                format: "int32"
+                description: "Get projects info"
+          400:
+            description: "Invalid project name"
+        x-swagger-router-controller: "Project"
+  /manager/project/tasks:
+    get:
+        tags:
+        - "manager"
+        description: "Get tasks"
+        operationId: "GetProjectTasks"
+        produces:
+        - "application/json"
+        - "text/plain"
+        parameters:
+        - name: "projectName"
+          in: "query"
+          description: "The name of project"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Successful operation"
+            schema:
+              type: "string"
+            headers:
+              X-Rate-Limit:
+                type: "integer"
+                format: "int32"
+                description: "Get projects info"
+          400:
+            description: "Invalid project name"
+        x-swagger-router-controller: "Project" 
+  /manager/project/developers:
+    get:
+        tags:
+        - "manager"
+        description: "Get developers"
+        operationId: "GetDevelopers"
+        produces:
+        - "application/json"
+        - "text/plain"
+        responses:
+          200:
+            description: "Successful operation"
+            schema:
+              type: "string"
+            headers:
+              X-Rate-Limit:
+                type: "integer"
+                format: "int32"
+                description: "Get developers"
+          400:
+            description: "Invalid project name"
+        x-swagger-router-controller: "Project"      
+  /manager/project/create:
+    post:
+      tags:
+      - "manager"
+      description: "Create task"
+      operationId: "CreateTask"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "createTask"
+        description: "Create Task"
+        required: true
+        schema:
+          $ref: "#/definitions/projectCreateTask"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Create task of project"
+        400:
+          description: "Task not created"
+    x-swagger-router-controller: "ProjectTasks"
+  /manager/project/update:
+    post:
+      tags:
+      - "manager"
+      description: "Update task"
+      operationId: "UpdateTask"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "updateTask"
+        description: "Update Task"
+        required: true
+        schema:
+          $ref: "#/definitions/projectUpdateTask"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Update task of project"
+        400:
+          description: "Task not updated"
+    x-swagger-router-controller: "ProjectTasks"
+  /manager/project/delete:
+    post:
+      tags:
+      - "manager"
+      description: "Delete task"
+      operationId: "DeleteTask"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "deleteTask"
+        description: "Delete Task"
+        required: true
+        schema:
+          $ref: "#/definitions/projectDeleteTask"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Delete task of project"
+        400:
+          description: "Task not deleted"
+    x-swagger-router-controller: "ProjectTasks"
+  /manager/project/assign:
+    post:
+      tags:
+      - "manager"
+      description: "Assign developer"
+      operationId: "AssignDeveloper"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "assignDeveloper"
+        description: "Assign developer"
+        required: true
+        schema:
+          $ref: "#/definitions/projectAssignDeveloper"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Developer assigned to task"
+        400:
+          description: "Developer not assigned to task"
+    x-swagger-router-controller: "ProjectTasks"   
+  /developer:
+    get:
+      tags:
+      - "developer"
+      description: "Get tasks of developer"
+      operationId: "GetTasks"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - name: "developerEmail"
+        in: "query"
+        description: "The email of developer"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Get tasks of developer"
+        400:
+          description: "Invalid developer name"
+      x-swagger-router-controller: "DeveloperTasks" 
+  /developer/completed:
+    post:
+      tags:
+      - "developer"
+      description: "Callback of developer about done task"
+      operationId: "DoneTask"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "doneTask"
+        description: "When task done"
+        required: true
+        schema:
+          $ref: "#/definitions/developerTaskDone"
+      responses:
+        200:
+          description: "Succsessful"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "Get tasks of developer"
+        400:
+          description: "invalid confirm password"
+    x-swagger-router-controller: "DoneTask"    
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Login:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "User email"
+      password:
+        type: "string"
+        description: "User Password"
+  Register:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "User name"
+      userEmail:
+        type: "string"
+        description: "User Email"
+      userRole:
+        type: "string"
+        description: "User Role"
+      userPassword:
+        type: "string"
+        description: "User Password"
+      userConfirmPassword:
+        type: "string"
+        description: "User confirm password"
+  managerNewProject:
+    type: "object"
+    properties:
+      projectName:
+        type: "string"
+        description: "Project name"
+      projectDescription:
+        type: "string"
+        description: "Project description"
+      projectManager:
+        type: "string"
+        description: "Manager Email"
+  managerUpdateProject:
+    type: "object"
+    properties:
+      projectWillBeUpdated:
+        type: "string"
+        description: "Project name that is being updated"
+      projectName:
+        type: "string"
+        description: "Project name"
+      projectDescription:
+        type: "string"
+        description: "Project description"
+  managerDeleteProject:
+    type: "object"
+    properties:
+      projectWillBeDeleted:
+        type: "string"
+        description: "Project name that is being deleted"
+  projectCreateTask:
+    type: "object"
+    properties:
+      createName:
+        type: "string"
+        description: "The name of task that is being created"
+      createDescription:
+        type: "string"
+        description: "The description of task is being created"
+      createStartDate:
+        type: "string"
+        description: "The start date of task"
+      createEndDate:
+        type: "string"
+        description: "The end date of task"
+      createProjectName: 
+        type: "string"
+        description: "The name of project who task is being created"
+  projectUpdateTask:
+    type: "object"
+    properties:
+      taskWillBeUpdated:
+        type: "string"
+        description: "The task who will be updated"
+      updateName:
+        type: "string"
+        description: "The name of task that is being created"
+      updateDescription:
+        type: "string"
+        description: "The description of task is being created"
+      updateStartDate:
+        type: "string"
+        description: "The start date of task"
+      updateEndDate:
+        type: "string"
+        description: "The end date of task"
+      updateProjectName: 
+        type: "string"
+        description: "The name of project who task is being created"
+  projectDeleteTask:
+    type: "object"
+    properties:
+      taskName:
+        type: "string"
+        description: "The name of task who being deleted"
+      projectName:
+        type: "string"
+        description: "Project name"
+  projectAssignDeveloper:
+    type: "object"
+    properties:
+      selectTask:
+        type: "string"
+        description: "Task to which the developer will be assigned"
+      selectProject:
+        type: "string"
+        description: "Project name"  
+      developerEmail:
+        type: "string"
+        description: "Email developer"
+  developerTaskDone:
+    type: "object"
+    properties:
+      taskName:
+        type: "string"
+        description: "The task is done"
+
